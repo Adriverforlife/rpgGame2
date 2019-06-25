@@ -41,7 +41,7 @@ function rpgGame() {
     function statSheet() {
         $("#playerhP").empty();
         combatAttack = baseAttack*lvl;
-        $("#playerhP").append("Level " + lvl + "<br>HP: " + playerChar.hP + "<br>Attack:" + combatAttack + "<br>Armor:" + playerChar.Armor + "<br>Gold:" + gold);
+        $("#playerhP").append("Level " + lvl + "<br>HP: " + playerChar.hP+"/"+maxhP + "<br>Attack:" + combatAttack + "<br>Armor:" + playerChar.Armor + "<br>Gold:" + gold);
     }
     //store, gold and items
     function shopActions() {
@@ -307,6 +307,7 @@ function rpgGame() {
         }
         baseAttack = playerChar.attack;
         baseArmor = playerChar.Armor;
+        maxhP = playerChar.hP;
 
         statSheet();
 
