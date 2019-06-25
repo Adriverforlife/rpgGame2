@@ -1,0 +1,51 @@
+a {
+    color: coral;
+}
+.arenabkd {
+    background-image: url("../images/back4.jpg");
+    background-repeat: no-repeat;
+    background-size: auto 500px;
+    background-position: center;
+}
+#resultCard{
+    background-color: peru;
+    padding: 5px;
+    text-emphasis: bold;
+}
+#charCard{
+    background-color: peru;
+
+}
+.bold {
+    font-weight: bold;
+    color: red;
+
+}
+.btn {
+    background-color: darkred;
+    border-color: blanchedalmond;
+}
+.bg-brown{
+    background-color: peru;
+    color: red;
+}
+.card {
+    margin: 20px
+}
+body {
+    background-color: black;
+    background-size: 100% ;
+    text-align: center;
+}
+li {
+    text-align: left;
+    
+}
+.lftaln{
+    text-align: left
+} 
+* {
+    
+    font-family: 'Roboto', sans-serif;
+
+}
