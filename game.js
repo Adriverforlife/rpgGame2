@@ -40,7 +40,7 @@ function rpgGame() {
     //starting stats
     function statSheet() {
         $("#playerhP").empty();
-        combatAttack = baseAttack
+        combatAttack = baseAttack*lvl;
         $("#playerhP").append("Level " + lvl + "<br>HP: " + playerChar.hP + "<br>Attack:" + combatAttack + "<br>Armor:" + playerChar.Armor + "<br>Gold:" + gold);
     }
     //store, gold and items
@@ -65,7 +65,8 @@ function rpgGame() {
         console.log(ITEM);
 
         if (ITEM == "Attack Up") {
-            playerChar.attack = baseAttack + 5;
+            baseAttack = baseAttack + 1;
+            console.log(baseAttack);
         }
         else if (ITEM == "Armor Up") {
             playerChar.Armor = playerChar.Armor + 1;
@@ -115,7 +116,7 @@ function rpgGame() {
         
         dBtn = true;
         console.log(dBtn)
-        setTimeout(function () {dBtn = false; }, 1000);
+        setTimeout(function () {dBtn = false; }, 1500);
         console.log(dBtn)
     }
 
