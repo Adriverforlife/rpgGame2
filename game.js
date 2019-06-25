@@ -9,7 +9,7 @@ function rpgGame() {
         { name: "Beastman", counterAttack: 5, hP: 20, imgFile: "assets/images/monsters/beastman.gif" },
         { name: "Spider", counterAttack: 2, hP: 10, imgFile: "assets/images/monsters/spider.gif" },
         { name: "Slime", counterAttack: 10, hP: 50, imgFile: "assets/images/monsters/slime.gif" }]
-    var boss = [{ name: "Demon", counterAttack: 50, hP: 1, imgFile: "assets/images/monsters/demon.gif" }]
+    var boss = [{ name: "Demon", counterAttack: 50, hP: 1000, imgFile: "assets/images/monsters/demon.gif" }]
 
     //variables for game
     var startGame = false;
@@ -110,18 +110,22 @@ function rpgGame() {
     $(document).on("click", ".itm", buyItem);
 
     //$(".atk").click(atkEnemy);
+    var dBtn = false;
     function disableATKbutton() {
-        var dBtn = document.getElementsByClassName("atk")
-        dBtn.disabled = true;
-        setTimeout(function () { dBtn.disabled = false; }, 5000);
-        console.log("test")
+        
+        dBtn = true;
+        console.log(dBtn)
+        setTimeout(function () {dBtn = false; }, 1000);
+        console.log(dBtn)
     }
 
 
 
 
     function atkEnemy() {
+        if(dBtn === false){
         chosenAction = $(this).text();
+        
         if (playerChar.hP > 0 && enemySelected === true && chosenAction == "Attack") {
             ATTACK();
             roundEND();
@@ -147,11 +151,12 @@ function rpgGame() {
             enemySelected = false;
             $("#damage").empty();
 
-        }
+        }}
     }
 
 
     function ATTACK() {
+        
         disableATKbutton();
         $("#playerImg").animate({ top: "-=20px", }, 100);
         $("#playerImg").animate({ top: "+=20px", }, 100);
