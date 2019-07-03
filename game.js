@@ -4,7 +4,7 @@ function rpgGame() {
     var mage = { attack: 10, Armor: 0, hP: 100 };
     var rogue = { attack: 7, Armor: 1, hP: 150 };
     var monk = { attack: 2, Armor: 0, hP: 400 };
-
+    //Moster stat sheet
     var monster = [
         { name: "Beastman", counterAttack: 5, hP: 20, imgFile: "assets/images/monsters/beastman.gif" },
         { name: "Spider", counterAttack: 2, hP: 10, imgFile: "assets/images/monsters/spider.gif" },
@@ -23,6 +23,7 @@ function rpgGame() {
     var winCount = 0;
     var lvl = 1;
     var maxhP = 0;
+    var basehP = 0;
     var baseArmor = 0;
     var bossBattle = false;
 
@@ -41,6 +42,7 @@ function rpgGame() {
     function statSheet() {
         $("#playerhP").empty();
         combatAttack = baseAttack*lvl;
+        maxhP = basehP + ((lvl-1)*25);
         $("#playerhP").append("Level " + lvl + "<br>HP: " + playerChar.hP+"/"+maxhP + "<br>Attack:" + combatAttack + "<br>Armor:" + playerChar.Armor + "<br>Gold:" + gold);
     }
     //store, gold and items
@@ -54,29 +56,46 @@ function rpgGame() {
         $("#actions").append(locationAction);
     }
     var shoP = [
-        { name: "Attack Up", statBoost: 5, gold: 0, imgFile: "assets/images/monsters/beastman.gif" },
-        { name: "Armor Up", statBoost: 5, gold: 0, imgFile: "assets/images/monsters/spider.gif" },
-        { name: "Potion", statBoost: 10, gold: 0, imgFile: "assets/images/monsters/slime.gif" },
-        { name: "Random Trinket", statBoost: 0, gold: 1000, imgFile: "assets/images/monsters/demon.gif" }];
+        { name: "Attack Up", statBoost: 5, gold: 10},
+        { name: "Armor Up", statBoost: 5, gold: 10},
+        { name: "Potion", statBoost: 10, gold: 10},
+        { name: "Random Trinket", statBoost: 0, gold: 25}];
     function buyItem() {
 
         console.log("shopper");
         ITEM = $(this).text();
         console.log(ITEM);
 
-        if (ITEM == "Attack Up") {
+        if (ITEM == "Attack Up" && gold>= 10) {
             baseAttack = baseAttack + 1;
-            console.log(baseAttack);
+            gold= gold-10
         }
-        else if (ITEM == "Armor Up") {
+        else if (ITEM == "Armor Up" && gold>= 10) {
             playerChar.Armor = playerChar.Armor + 1;
+            gold= gold-10
         }
-        else if (ITEM == "Potion") {
-            playerChar.hP = playerChar.hP + 25;
+        else if (ITEM == "Potion" && gold>= 10) {
+            playerChar.hP = maxhP + 25;
+            gold= gold-10
         }
 
-        else if (ITEM == "Other") {
+        else if (ITEM == "Random Trinket" && gold>= 25) {
             lvl = lvl + 1;
+            gold= gold-100
+
+        }
+        else if (ITEM == "Sleep for the Night" && gold>= inn[0].gold){
+            playerChar.hP = maxhP;
+            gold = gold -inn[0].gold;
+        }
+        else if (ITEM == "Eat a Meal" && gold>= inn[1].gold){
+            var potionCalc = playerChar.hP+25;
+            if (potionCalc <= maxhP){
+            playerChar.hP = playerChar.hP +25;}
+            else{
+                playerChar.hP = maxhP;
+            }
+            gold = gold -inn[1].gold;
         }
 
         statSheet();
@@ -85,6 +104,12 @@ function rpgGame() {
 
 
     //inn, max hp
+    var inn = [
+        { name: "Sleep for the Night", gold: 5},
+        { name: "Eat a Meal", gold: 2},
+        ];
+
+    
 
     //experience, levels, etc.
     //ability to run away
@@ -104,7 +129,7 @@ function rpgGame() {
     //boss fight
 
     //persistant items and consumable items
-    var journey = ["explore", "Shop", "Inn", "Boss"];
+    var journey = ["Explore", "Shop", "Inn", "Boss"];
     //ADD CODE FOR ABOVE
     $(document).on("click", ".char", charactorSelect);
     $(document).on("click", ".atk", atkEnemy);
@@ -124,7 +149,7 @@ function rpgGame() {
 
 
     function atkEnemy() {
-        if(dBtn === false){
+        if(dBtn === false&& enemySelected === true){
         chosenAction = $(this).text();
         
         if (playerChar.hP > 0 && enemySelected === true && chosenAction == "Attack") {
@@ -132,14 +157,18 @@ function rpgGame() {
             roundEND();
         }
         else if (playerChar.hP > 0 && enemySelected === true && chosenAction == "Run") {
+            disableATKbutton();
+
             counterATK();
             $("#result").append("You ESCAPED");
             $("#Computer").empty();
             $("#computerhP").empty();
             $("#computerImg").attr("src", "");
+            $("#actions").empty();
+            statSheet();
+
             enemySelected = false;
             bossBattle = false;
-            combatAttack = baseAttack
 
 
         }
@@ -169,14 +198,14 @@ function rpgGame() {
         $("#computerhP").empty();
         $("#computerhP").append("HP: " + enemyhP);
         $("#damage").append("You did " + combatAttack + " damage to the enemy.");
-        combatAttack = combatAttack + baseAttack;
+        
 
 
     }
 
     function counterATK() {
         if (baseArmor < computerChar.counterAttack) {
-            playerChar.hP = playerChar.hP + baseArmor - computerChar.counterAttack;
+            playerChar.hP = playerChar.hP - computerChar.counterAttack;
             //$("#playerhP").append("HP: " + playerChar.hP);
 
             $("#damage").append(" The monster attacked for " + computerChar.counterAttack + " damage.");
@@ -205,7 +234,7 @@ function rpgGame() {
     }
     function roundEND() {
         if (playerChar.hP < 1) {
-            $("#result").append("You LOSE");
+            $("#result").append("You DIED. The world is doomed...");
             deadSound.play();
 
         }
@@ -220,10 +249,10 @@ function rpgGame() {
                 winCount++;
                 gold++;
                 $("#actions").empty();
-                combatAttack = baseAttack
                 if (winCount === lvl) {
                     lvl++;
                     winCount = 0;
+                    playerChar.hP = playerChar.hP +25;
                     console.log(winCount)
                 }
                 console.log(winCount)
@@ -275,7 +304,8 @@ function rpgGame() {
             startJourney();
 
         }
-        else if (enemySelected === false) {
+        else if (dBtn === false&&enemySelected === false) {
+            
             $("#damage").empty();
 
             selecctedChar = $(this).text();
@@ -307,15 +337,15 @@ function rpgGame() {
         }
         baseAttack = playerChar.attack;
         baseArmor = playerChar.Armor;
-        maxhP = playerChar.hP;
+        basehP = playerChar.hP;
+
 
         statSheet();
 
 
     }
     function selEnemy() {
-        if (selecctedChar == "explore") {
-            combatAttack = baseAttack
+        if (selecctedChar == "Explore") {
 
             fightActions();
             computerChar = monster[Math.floor(Math.random() * monster.length)];
@@ -327,6 +357,9 @@ function rpgGame() {
         }
         else if (selecctedChar == "Shop") {
             shopActions();
+            $("#computerImg").attr("src", "assets/images/buildings/Shop.gif");
+            $("#Computer").append("Shop");
+
             for (i = 0; i < shoP.length; i++) {
                 shopItemsDiv = $('<div>').attr("class", "lftaln");
 
@@ -341,7 +374,6 @@ function rpgGame() {
 
         }
         else if (selecctedChar == "Boss") {
-            combatAttack = baseAttack
             bossBattle = true;
 
             fightActions();
@@ -351,6 +383,21 @@ function rpgGame() {
             $("#computerhP").append("HP: " + enemyhP);
             $("#Computer").append(computerChar.name);
 
+        }
+        else if (selecctedChar == "Inn"){
+            shopActions();
+            $("#computerImg").attr("src", "assets/images/buildings/Inn.gif");
+            $("#Computer").append("Inn");
+            for (i = 0; i < inn.length; i++) {
+                shopItemsDiv = $('<div>').attr("class", "lftaln");
+
+                var shopItems = $('<button>').text(inn[i].name);
+                shopItems.attr("class", "btn btn-primary itm");
+                shopItemsDiv.append(shopItems);
+                shopItemsDiv.append(" " + inn[i].gold + " gold<br><br>");
+                $("#damage").append(shopItemsDiv);
+
+            }
         }
     }
 }
