@@ -41,9 +41,9 @@ function rpgGame() {
     //starting stats
     function statSheet() {
         $("#playerhP").empty();
-        combatAttack = baseAttack*lvl;
-        maxhP = basehP + ((lvl-1)*25);
-        $("#playerhP").append("Level " + lvl + "<br>HP: " + playerChar.hP+"/"+maxhP + "<br>Attack:" + combatAttack + "<br>Armor:" + playerChar.Armor + "<br>Gold:" + gold);
+        combatAttack = baseAttack * lvl;
+        maxhP = basehP + ((lvl - 1) * 25);
+        $("#playerhP").append("Level " + lvl + "<br>HP: " + playerChar.hP + "/" + maxhP + "<br>Attack:" + combatAttack + "<br>Armor:" + playerChar.Armor + "<br>Gold:" + gold);
     }
     //store, gold and items
     function shopActions() {
@@ -56,46 +56,47 @@ function rpgGame() {
         $("#actions").append(locationAction);
     }
     var shoP = [
-        { name: "Attack Up", statBoost: 5, gold: 10},
-        { name: "Armor Up", statBoost: 5, gold: 10},
-        { name: "Potion", statBoost: 10, gold: 10},
-        { name: "Random Trinket", statBoost: 0, gold: 25}];
+        { name: "Attack Up", statBoost: 5, gold: 10 },
+        { name: "Armor Up", statBoost: 5, gold: 10 },
+        { name: "Potion", statBoost: 10, gold: 10 },
+        { name: "Random Trinket", statBoost: 0, gold: 25 }];
     function buyItem() {
 
         console.log("shopper");
         ITEM = $(this).text();
         console.log(ITEM);
 
-        if (ITEM == "Attack Up" && gold>= 10) {
+        if (ITEM == "Attack Up" && gold >= 10) {
             baseAttack = baseAttack + 1;
-            gold= gold-10
+            gold = gold - 10
         }
-        else if (ITEM == "Armor Up" && gold>= 10) {
+        else if (ITEM == "Armor Up" && gold >= 10) {
             playerChar.Armor = playerChar.Armor + 1;
-            gold= gold-10
+            gold = gold - 10
         }
-        else if (ITEM == "Potion" && gold>= 10) {
+        else if (ITEM == "Potion" && gold >= 10) {
             playerChar.hP = maxhP + 25;
-            gold= gold-10
+            gold = gold - 10
         }
 
-        else if (ITEM == "Random Trinket" && gold>= 25) {
+        else if (ITEM == "Random Trinket" && gold >= 25) {
             lvl = lvl + 1;
-            gold= gold-100
+            gold = gold - 100
 
         }
-        else if (ITEM == "Sleep for the Night" && gold>= inn[0].gold){
+        else if (ITEM == "Sleep for the Night" && gold >= inn[0].gold) {
             playerChar.hP = maxhP;
-            gold = gold -inn[0].gold;
+            gold = gold - inn[0].gold;
         }
-        else if (ITEM == "Eat a Meal" && gold>= inn[1].gold){
-            var potionCalc = playerChar.hP+25;
-            if (potionCalc <= maxhP){
-            playerChar.hP = playerChar.hP +25;}
-            else{
+        else if (ITEM == "Eat a Meal" && gold >= inn[1].gold) {
+            var potionCalc = playerChar.hP + 25;
+            if (potionCalc <= maxhP) {
+                playerChar.hP = playerChar.hP + 25;
+            }
+            else {
                 playerChar.hP = maxhP;
             }
-            gold = gold -inn[1].gold;
+            gold = gold - inn[1].gold;
         }
 
         statSheet();
@@ -105,11 +106,11 @@ function rpgGame() {
 
     //inn, max hp
     var inn = [
-        { name: "Sleep for the Night", gold: 5},
-        { name: "Eat a Meal", gold: 2},
-        ];
+        { name: "Sleep for the Night", gold: 5 },
+        { name: "Eat a Meal", gold: 2 },
+    ];
 
-    
+
 
     //experience, levels, etc.
     //ability to run away
@@ -138,10 +139,10 @@ function rpgGame() {
     //$(".atk").click(atkEnemy);
     var dBtn = false;
     function disableATKbutton() {
-        
+
         dBtn = true;
         console.log(dBtn)
-        setTimeout(function () {dBtn = false; }, 1500);
+        setTimeout(function () { dBtn = false; }, 1500);
         console.log(dBtn)
     }
 
@@ -149,44 +150,55 @@ function rpgGame() {
 
 
     function atkEnemy() {
-        if(dBtn === false&& enemySelected === true){
-        chosenAction = $(this).text();
-        
-        if (playerChar.hP > 0 && enemySelected === true && chosenAction == "Attack") {
-            ATTACK();
-            roundEND();
+        if (dBtn === false && enemySelected === true) {
+            chosenAction = $(this).text();
+
+            if (playerChar.hP > 0 && enemySelected === true && chosenAction == "Attack") {
+                ATTACK();
+                roundEND();
+            }
+            else if (playerChar.hP > 0 && enemySelected === true && chosenAction == "Run") {
+                disableATKbutton();
+
+                counterATK();
+                $("#actions").empty();
+                statSheet();
+
+                enemySelected = false;
+                bossBattle = false;
+                if
+                    (playerChar.hP <= 0) {
+                    roundEND();
+                }
+                else {
+                    $("#result").append("You ESCAPED");
+                    $("#Computer").empty();
+                    $("#computerhP").empty();
+                    $("#computerImg").attr("src", "");
+
+
+                }
+
+            }
+            else if (playerChar.hP <= 0) {
+                roundEND();
+            }
+            else {
+                $("#result").append("You LEFT");
+                $("#Computer").empty();
+                $("#computerhP").empty();
+                $("#computerImg").attr("src", "");
+                console.log("nothing")
+                enemySelected = false;
+                $("#damage").empty();
+
+            }
         }
-        else if (playerChar.hP > 0 && enemySelected === true && chosenAction == "Run") {
-            disableATKbutton();
-
-            counterATK();
-            $("#result").append("You ESCAPED");
-            $("#Computer").empty();
-            $("#computerhP").empty();
-            $("#computerImg").attr("src", "");
-            $("#actions").empty();
-            statSheet();
-
-            enemySelected = false;
-            bossBattle = false;
-
-
-        }
-        else {
-            $("#result").append("You LEFT");
-            $("#Computer").empty();
-            $("#computerhP").empty();
-            $("#computerImg").attr("src", "");
-            console.log("nothing")
-            enemySelected = false;
-            $("#damage").empty();
-
-        }}
     }
 
 
     function ATTACK() {
-        
+
         disableATKbutton();
         $("#playerImg").animate({ top: "-=20px", }, 100);
         $("#playerImg").animate({ top: "+=20px", }, 100);
@@ -198,7 +210,7 @@ function rpgGame() {
         $("#computerhP").empty();
         $("#computerhP").append("HP: " + enemyhP);
         $("#damage").append("You did " + combatAttack + " damage to the enemy.");
-        
+
 
 
     }
@@ -235,6 +247,7 @@ function rpgGame() {
     function roundEND() {
         if (playerChar.hP < 1) {
             $("#result").append("You DIED. The world is doomed...");
+            $("#playerImg").attr("src", "");
             deadSound.play();
 
         }
@@ -252,7 +265,7 @@ function rpgGame() {
                 if (winCount === lvl) {
                     lvl++;
                     winCount = 0;
-                    playerChar.hP = playerChar.hP +25;
+                    playerChar.hP = playerChar.hP + 25;
                     console.log(winCount)
                 }
                 console.log(winCount)
@@ -304,8 +317,8 @@ function rpgGame() {
             startJourney();
 
         }
-        else if (dBtn === false&&enemySelected === false) {
-            
+        else if (dBtn === false && enemySelected === false) {
+
             $("#damage").empty();
 
             selecctedChar = $(this).text();
@@ -384,7 +397,7 @@ function rpgGame() {
             $("#Computer").append(computerChar.name);
 
         }
-        else if (selecctedChar == "Inn"){
+        else if (selecctedChar == "Inn") {
             shopActions();
             $("#computerImg").attr("src", "assets/images/buildings/Inn.gif");
             $("#Computer").append("Inn");
