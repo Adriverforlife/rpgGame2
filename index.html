@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Added link to the jQuery Library -->
+
+
+    <!-- Added a link to Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <!-- Added a link to our external stylesheet-->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-4">
+                <div id="charCard" class="card">
+                    <h3 id="location" class="card-header">Characters</h3>
+
+                    <div id="charSel" class="card-body">
+                        <button id="fighter1" class="btn btn-primary char"
+                            value="1"><span>Fighter</span></button><br><br>
+                        <button id="mage1" class="btn btn-primary char" value="2"><span>Mage</span></button><br><br>
+                        <button id="rogue1" class="btn btn-primary char" value="3"><span>Rogue</span></button><br><br>
+                        <button id="monk1" class="btn btn-primary char" value="4"><span>Monk</span></button><br><br>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div id="arena" class="card arenabkd">
+                    <h3 id="actions" class="card-header">
+                    </h3>
+                    <div class="card-body">
+                        <h1 id="Player"> </h1>
+                        <p id="playerhP"> </p>
+                        <h1 id="operator"><img id="playerImg" src="" ; style="position: relative;">   <img
+                                id="computerImg" style="position: relative;" src=""></h1>
+                        <h1 id="Computer"> </h1>
+
+                        <p id="computerhP"> </p>
+
+                    </div>
+                </div>
+                <div id="resultCard" class="card">
+                    <p id="damage"> </p>
+                    <h1 id="result"></h1>
+                    <h1 id="restart"></h1>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <audio controls autoplay loop>
+        <source src="assets/sounds/music.mp3" type="audio/mpeg">
+
+    </audio>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="game.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Handler for .ready() called.
+            rpgGame();
+        });
+
+    </script>
+
+
+
+</body>
+
+</html>
